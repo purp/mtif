@@ -1,5 +1,5 @@
 require "mtif/version"
 
-module Mtif
+module MTIF
   # Your code goes here...
 end

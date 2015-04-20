@@ -5,7 +5,7 @@ require 'mtif/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "mtif"
-  spec.version       = Mtif::VERSION
+  spec.version       = MTIF::VERSION
   spec.authors       = ["Jim Meyer"]
   spec.email         = ["jim@geekdaily.org"]
   spec.summary       = %q{TODO: Write a short summary. Required.}

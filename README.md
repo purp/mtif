@@ -1,4 +1,4 @@
-# Mtif
+# MTIF
 
 TODO: Write a gem description
 
