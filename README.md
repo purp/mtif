@@ -1,6 +1,6 @@
 # MTIF
 
-TODO: Write a gem description
+A gem to read Movable Type Import Format
 
 ## Installation
 
@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+
 
 ## Contributing
 
