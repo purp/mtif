@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jim@geekdaily.org"]
   spec.summary       = %q{Read Movable Type Import Format files.}
   # spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.homepage      = "https://geekdaily.org/projects/mtif"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
