@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = MTIF::VERSION
   spec.authors       = ["Jim Meyer"]
   spec.email         = ["jim@geekdaily.org"]
-  spec.summary       = %q{Read Movable Type Import Format files.}
+  spec.summary       = %q{Read, parse, and write Movable Type Import Format files.}
   # spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = "https://geekdaily.org/projects/mtif"
   spec.license       = "MIT"
