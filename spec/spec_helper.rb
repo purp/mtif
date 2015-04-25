@@ -95,3 +95,9 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+RSpec::Matchers.define :have_constant do |constant|
+  match do |thing|
+    thing.const_defined?(constant)
+  end
+end
