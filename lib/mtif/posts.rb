@@ -4,7 +4,7 @@ class MTIF
   class Post
     attr_accessor :source, :data
   
-    SINGLE_VALUE_KEYS = %w(author title status basename date body extended_body excerpt
+    SINGLE_VALUE_KEYS = %w(author title status basename date unique_url body extended_body excerpt
     keywords allow_comments allow_pings convert_breaks no_entry).map(&:to_sym)
   
     MULTILINE_KEYS = %w(body extended_body excerpt keywords comment ping).map(&:to_sym)
