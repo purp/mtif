@@ -148,7 +148,7 @@ class MTIF
     end
 
     def parse_source
-      source.slice_before(/-----/).each do |lines|
+      source.slice_before(/^-----/).each do |lines|
         if lines.first =~ /^-----/ && lines.size > 1
           # Multiline data
           store_data(lines.shift(2).last.chomp(":\n"), lines.join.strip)
