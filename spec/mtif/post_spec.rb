@@ -121,6 +121,7 @@ RSpec.describe MTIF::Post do
         "TITLE: Crazy Parents: A Primer\n",
         "DATE: 06/19/1999 07:00:00 PM\n",
         "ALLOW COMMENTS: 0\n",
+        "PRIMARY CATEGORY: Fun!\n",
         "CATEGORY: Fun!\n",
         "-----\n",
         "BODY:\n",
