@@ -24,7 +24,7 @@ Boy, it'd be smart to put something here. One day I will. Or maybe you will? See
 
 ## Contributing
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/a52b50316f369a5baa8f/maintainability)](https://codeclimate.com/github/purp/mtif/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a52b50316f369a5baa8f/test_coverage)](https://codeclimate.com/github/purp/mtif/test_coverage)
+[![Build Status](https://travis-ci.org/purp/mtif.svg?branch=master)](https://travis-ci.org/purp/mtif) [![Maintainability](https://api.codeclimate.com/v1/badges/a52b50316f369a5baa8f/maintainability)](https://codeclimate.com/github/purp/mtif/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a52b50316f369a5baa8f/test_coverage)](https://codeclimate.com/github/purp/mtif/test_coverage)
 
 Looking to get involved but don't have a particular itch to scratch? There are plenty of other ways to help!
 
