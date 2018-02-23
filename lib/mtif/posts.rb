@@ -3,14 +3,14 @@ require "time"
 class MTIF
   class Post
     attr_accessor :source, :data
-  
+
     SINGLE_VALUE_KEYS = %w(author title status basename date unique_url body extended_body excerpt
     keywords allow_comments allow_pings convert_breaks no_entry primary_category).map(&:to_sym)
-  
+
     MULTILINE_KEYS = %w(body extended_body excerpt keywords comment ping).map(&:to_sym)
-  
+
     MULTIVALUE_KEYS = %w(category tag comment ping).map(&:to_sym)
-    
+
     VALID_KEYS = (SINGLE_VALUE_KEYS + MULTILINE_KEYS + MULTIVALUE_KEYS).sort.uniq
 
     DATE_FORMAT = "%m/%d/%Y %I:%M:%S %p"
@@ -42,14 +42,14 @@ class MTIF
     def initialize(content)
       @source = content
       @data = {}
-    
+
       MULTIVALUE_KEYS.each do |key|
         @data[key] = []
       end
-    
+
       parse_source
     end
-  
+
     def to_mtif
       result = []
       single_line_single_value_keys.each do |key|
@@ -75,7 +75,7 @@ class MTIF
         result << '-----'
         result << "#{mtif_key(key)}:\n#{mtif_value(value)}"
       end
-    
+
       multiline_multivalue_keys.each do |key|
         values = self.send(key)
         next if values.nil? || (values.respond_to?(:empty) && values.empty?)
@@ -116,7 +116,7 @@ class MTIF
     def mtif_key_to_key(raw_key)
       raw_key.strip.downcase.tr(' ','_').to_sym unless raw_key.nil?
     end
-  
+
     def mtif_key(key)
       key.to_s.tr('_', ' ').upcase
     end
@@ -135,7 +135,7 @@ class MTIF
         raw_value
       end
     end
-  
+
     def store_data(raw_key, raw_value)
       key = mtif_key_to_key(raw_key)
       value = convert_to_native_type(raw_value)

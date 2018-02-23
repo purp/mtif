@@ -9,12 +9,12 @@ class MTIF
   def initialize(content)
     @posts = content.slice_after(/^--------$/).map {|raw_post| MTIF::Post.new(raw_post)}
   end
-  
+
   def self.load_file(filename)
     mtif_file = File.open(filename)
     mtif = MTIF.new(mtif_file.readlines)
     mtif_file.close
-    
+
     mtif
   end
 
