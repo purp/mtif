@@ -167,6 +167,12 @@ RSpec.describe MTIF::Post do
       expect(@post).to respond_to(:to_mtif)
       expect(@post.to_mtif).to eq(@content.join)
     end
+
+    it 'should return concise MTIF containing updated value' do
+      @post.allow_comments = 1
+      expected = @content.join.gsub('ALLOW COMMENTS: 0', 'ALLOW COMMENTS: 1')
+      expect(@post.to_mtif).to eq(expected)
+    end
   end
   
 end
