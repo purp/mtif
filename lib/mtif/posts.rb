@@ -100,10 +100,10 @@ class MTIF
       key = method.to_s.chomp('=').to_sym
 
       if valid_key?(key)
-        if key = method
-          data[key]
+        if key == method
+          @data[key]
         else
-          data[key] = args.first
+          @data[key] = args.first
         end
       else
         super
