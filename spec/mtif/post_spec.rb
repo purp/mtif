@@ -115,10 +115,19 @@ RSpec.describe MTIF::Post do
             expect(post.send(key)) == []
           end
         end
+        
+        it 'should default to arrays for multivalue keys' do
+          post = MTIF::Post.new([])
+
+          MTIF::Post::MULTIVALUE_KEYS.each.with_index do |key, i|
+            post.send((key.to_s + '=').to_sym, [i])
+            expect(post.send(key)) == [i]
+          end
+        end
       end
     end
   end
-  
+
   describe 'instances with content' do
     before :each do
       @content = [
@@ -128,6 +137,7 @@ RSpec.describe MTIF::Post do
         "ALLOW COMMENTS: 0\n",
         "PRIMARY CATEGORY: Fun!\n",
         "CATEGORY: Fun!\n",
+        "TAGS: \"Movable Type\",foo,bar\n",
         "-----\n",
         "BODY:\n",
         "Start singing an obnoxious song and ----- never ----- stop.\n",

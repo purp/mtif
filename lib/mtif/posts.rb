@@ -8,6 +8,9 @@ class MTIF
     keywords allow_comments allow_pings convert_breaks no_entry primary_category).map(&:to_sym)
     MULTILINE_KEYS = %w(body extended_body excerpt keywords comment ping).map(&:to_sym)
     MULTIVALUE_KEYS = %w(category tag comment ping).map(&:to_sym)
+    MULTIVALUE_KEYS = %w(category tags comment ping).map(&:to_sym)
+
+    CSV_KEYS = %w(tags).map(&:to_sym)
 
     VALID_KEYS = (SINGLE_VALUE_KEYS + MULTILINE_KEYS + MULTIVALUE_KEYS).sort.uniq
 
@@ -63,6 +66,14 @@ class MTIF
       single_line_multivalue_keys.each do |key|
         values = self.send(key)
         next if values.nil? || (values.respond_to?(:empty) && values.empty?)
+
+        if CSV_KEYS.include?(key)
+          values = [
+            values.map{|v|
+              v.include?("\s") ? "\"#{v}\"" : v
+            }.join(',')
+          ]
+        end
 
         values.each do |value|
           result << "#{mtif_key(key)}: #{mtif_value(value)}"
@@ -142,7 +153,13 @@ class MTIF
       value = convert_to_native_type(raw_value)
 
       if MULTIVALUE_KEYS.include?(key)
-        self.data[key] << value unless value.empty?
+        if CSV_KEYS.include?(key)
+          value.split(',').each do |v|
+            self.data[key] << v.gsub(/^\"|\"$/, '') unless v.empty?
+          end
+        else
+          self.data[key] << value unless value.empty?
+        end
       else
         self.data[key] = value
       end
