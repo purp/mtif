@@ -125,7 +125,7 @@ RSpec.describe MTIF::Post do
       end
     end
   end
-  
+
   context 'parsing input' do
     before :each do
       @content = [
@@ -147,7 +147,20 @@ RSpec.describe MTIF::Post do
       expect(@post.body).to eq("Start singing an obnoxious song and ----- never ----- stop.")
     end
   end
-  
+
+  context 'updating data' do
+    subject {MTIF::Post.new([])}
+    
+    it 'should default to arrays for multivalue keys' do
+      post = MTIF::Post.new([])
+
+      MTIF::Post::MULTIVALUE_KEYS.each.with_index do |key, i|
+        post.send((key.to_s + '=').to_sym, [i])
+        expect(post.send(key)) == [i]
+      end
+    end
+  end
+
   context '#to_mtif' do
     before :each do
       # TODO: refactor to remove ordering dependency
@@ -158,6 +171,7 @@ RSpec.describe MTIF::Post do
         "ALLOW COMMENTS: 0\n",
         "PRIMARY CATEGORY: Fun!\n",
         "CATEGORY: Fun!\n",
+        "TAGS: \"Movable Type\",foo,bar\n",
         "-----\n",
         "BODY:\n",
         "Start singing an obnoxious song and never stop.\n",
