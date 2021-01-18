@@ -3,7 +3,7 @@ RSpec.describe MTIF::Post do
     expect(MTIF::Post.new([])).to respond_to(:source, :data)
   end
   
-  context 'valid keys' do
+  describe 'class constants' do
     it 'should have a list of valid single-value keys' do
       expect(MTIF::Post).to have_constant('SINGLE_VALUE_KEYS')
       expect(MTIF::Post::SINGLE_VALUE_KEYS).not_to be_empty
@@ -27,69 +27,63 @@ RSpec.describe MTIF::Post do
       expect(MTIF::Post).to have_constant('VALID_KEYS')
       expect(MTIF::Post::VALID_KEYS).to match_array((MTIF::Post::SINGLE_VALUE_KEYS + MTIF::Post::MULTILINE_KEYS + MTIF::Post::MULTIVALUE_KEYS).uniq)
     end
-    
-    context 'key methods' do
-      before :each do
-        @post = MTIF::Post.new([])
-      end
-      
-      subject {@post}
+  end
 
-      it {should respond_to(:valid_keys)}
-      context '#valid_keys' do
-        subject {@post.valid_keys}
+  describe 'instances' do
+    subject(:post) {MTIF::Post.new([])}
+
+    it {should respond_to(:valid_keys)}
+    context '#valid_keys' do
+      subject {post.valid_keys}
         
-        it {should == MTIF::Post::VALID_KEYS}
+      it {should == MTIF::Post::VALID_KEYS}
+    end
+
+    it {should respond_to(:valid_key?)}
+    describe '#valid_key?' do
+      it 'should be true when valid, false otherwise' do
+        valid_key = post.valid_keys.first.to_sym
+        invalid_key = valid_key.to_s.reverse.to_sym
+
+        expect(post.valid_key?(valid_key)).to be_truthy
+        expect(post.valid_key?(valid_key.to_s)).to be_truthy
+        expect(post.valid_key?(invalid_key)).to be_falsey
+        expect(post.valid_key?(invalid_key.to_s)).to be_falsey
       end
+    end
 
-      it {should respond_to(:valid_key?)}
-      context '#valid_key?' do
-        it 'should be true when valid, false otherwise' do
-          valid_key = @post.valid_keys.first.to_sym
-          invalid_key = valid_key.to_s.reverse.to_sym
-
-          expect(@post.valid_key?(valid_key)).to be_truthy
-          expect(@post.valid_key?(valid_key.to_s)).to be_truthy
-          expect(@post.valid_key?(invalid_key)).to be_falsey
-          expect(@post.valid_key?(invalid_key.to_s)).to be_falsey
-        end
-      end
-
-      context 'returning lists' do
-        it {should respond_to(:single_line_single_value_keys)}
-        context '#single_line_single_value_keys' do
-          subject {@post.single_line_single_value_keys}
+    it {should respond_to(:single_line_single_value_keys)}
+    describe '#single_line_single_value_keys' do
+      subject {post.single_line_single_value_keys}
           
-          it {should_not include(*MTIF::Post::MULTILINE_KEYS)}
-          it {should_not include(*MTIF::Post::MULTIVALUE_KEYS)}
-          it {should include(*(MTIF::Post::SINGLE_VALUE_KEYS - MTIF::Post::MULTILINE_KEYS))}
-        end
+      it {should_not include(*MTIF::Post::MULTILINE_KEYS)}
+      it {should_not include(*MTIF::Post::MULTIVALUE_KEYS)}
+      it {should include(*(MTIF::Post::SINGLE_VALUE_KEYS - MTIF::Post::MULTILINE_KEYS))}
+    end
 
-        it {should respond_to(:single_line_multivalue_keys)}
-        context '#single_line_multivalue_keys' do
-          subject {@post.single_line_multivalue_keys}
+    it {should respond_to(:single_line_multivalue_keys)}
+    describe '#single_line_multivalue_keys' do
+      subject {post.single_line_multivalue_keys}
           
-          it {should_not include(*MTIF::Post::MULTILINE_KEYS)}
-          it {should_not include(*MTIF::Post::SINGLE_VALUE_KEYS)}
-          it {should include(*(MTIF::Post::MULTIVALUE_KEYS - MTIF::Post::MULTILINE_KEYS))}
-        end
+      it {should_not include(*MTIF::Post::MULTILINE_KEYS)}
+      it {should_not include(*MTIF::Post::SINGLE_VALUE_KEYS)}
+      it {should include(*(MTIF::Post::MULTIVALUE_KEYS - MTIF::Post::MULTILINE_KEYS))}
+    end
 
-        it {should respond_to(:multiline_single_value_keys)}
-        context '#multiline_single_value_keys' do
-          subject {@post.multiline_single_value_keys}
+    it {should respond_to(:multiline_single_value_keys)}
+    describe '#multiline_single_value_keys' do
+      subject {post.multiline_single_value_keys}
           
-          it {should_not include(*MTIF::Post::MULTIVALUE_KEYS)}
-          it {should include(*(MTIF::Post::MULTILINE_KEYS & MTIF::Post::SINGLE_VALUE_KEYS))}
-        end
+      it {should_not include(*MTIF::Post::MULTIVALUE_KEYS)}
+      it {should include(*(MTIF::Post::MULTILINE_KEYS & MTIF::Post::SINGLE_VALUE_KEYS))}
+    end
 
-        it {should respond_to(:multiline_multivalue_keys)}
-        context '#multiline_multivalue_keys' do
-          subject {@post.multiline_multivalue_keys}
+    it {should respond_to(:multiline_multivalue_keys)}
+    describe '#multiline_multivalue_keys' do
+      subject {post.multiline_multivalue_keys}
 
-          it {should_not include(*MTIF::Post::SINGLE_VALUE_KEYS)}
-          it {should include(*(MTIF::Post::MULTILINE_KEYS & MTIF::Post::MULTIVALUE_KEYS))}
-        end
-      end
+      it {should_not include(*MTIF::Post::SINGLE_VALUE_KEYS)}
+      it {should include(*(MTIF::Post::MULTILINE_KEYS & MTIF::Post::MULTIVALUE_KEYS))}
     end
   end
   
