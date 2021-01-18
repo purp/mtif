@@ -14,6 +14,9 @@ class MTIF
     VALID_KEYS = (SINGLE_VALUE_KEYS + MULTILINE_KEYS + MULTIVALUE_KEYS).sort.uniq
 
     DATE_FORMAT = "%m/%d/%Y %I:%M:%S %p"
+    
+    FIELD_SEPARATOR = '-----'
+    POST_SEPARATOR = '--------'
 
     def valid_keys
       VALID_KEYS
@@ -72,7 +75,7 @@ class MTIF
         value = self.send(key)
         next if value.nil? || (value.respond_to?(:empty) && value.empty?)
 
-        result << '-----'
+        result << FIELD_SEPARATOR
         result << "#{mtif_key(key)}:\n#{mtif_value(value)}"
       end
 
@@ -81,14 +84,14 @@ class MTIF
         next if values.nil? || (values.respond_to?(:empty) && values.empty?)
 
         values.each do |value|
-          result << '-----'
+          result << FIELD_SEPARATOR
           result << "#{mtif_key(key)}:\n#{mtif_value(value)}"
         end
       end
 
 
-      result << '-----' unless result.last == '-----' #close the final field
-      result << '--------' # close the post
+      result << FIELD_SEPARATOR unless result.last == FIELD_SEPARATOR #close the final field
+      result << POST_SEPARATOR # close the post
       result.join("\n") + "\n"
     end
 
@@ -148,8 +151,8 @@ class MTIF
     end
 
     def parse_source
-      source.slice_before(/-----/).each do |lines|
-        if lines.first =~ /^-----/ && lines.size > 1
+      source.slice_before(/^#{FIELD_SEPARATOR}/).each do |lines|
+        if lines.first =~ /^#{FIELD_SEPARATOR}/ && lines.size > 1
           # Multiline data
           store_data(lines.shift(2).last.chomp(":\n"), lines.join.strip)
         elsif lines.first =~ /^[A-Z ]+: /

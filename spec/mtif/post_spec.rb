@@ -113,6 +113,28 @@ RSpec.describe MTIF::Post do
     end
   end
   
+  context 'parsing input' do
+    before :each do
+      @content = [
+        "AUTHOR: The ----- Meyer Kids\n",
+        "TITLE: Crazy Parents: -------- A Primer\n",
+        "-----\n",
+        "BODY:\n",
+        "Start singing an obnoxious song and ----- never ----- stop.\n",
+        "-----\n",
+        "--------\n"
+      ]
+
+      @post = MTIF::Post.new(@content)
+    end
+    
+    it 'should not notice separators that are not at the beginning of a line' do
+      expect(@post.author).to eq("The ----- Meyer Kids")
+      expect(@post.title).to eq("Crazy Parents: -------- A Primer")
+      expect(@post.body).to eq("Start singing an obnoxious song and ----- never ----- stop.")
+    end
+  end
+  
   context '#to_mtif' do
     before :each do
       # TODO: refactor to remove ordering dependency
