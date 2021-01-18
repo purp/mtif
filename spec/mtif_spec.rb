@@ -6,7 +6,7 @@ RSpec.describe MTIF do
   context "#initialize" do
     context 'without content' do
       it 'should fail' do
-        expect {MTIF.new}.to raise_error
+        expect {MTIF.new}.to raise_error(ArgumentError)
       end
     end
 
