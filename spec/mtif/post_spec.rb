@@ -41,14 +41,28 @@ RSpec.describe MTIF::Post do
 
     it {should respond_to(:valid_key?)}
     describe '#valid_key?' do
-      it 'should be true when valid, false otherwise' do
-        valid_key = post.valid_keys.first.to_sym
-        invalid_key = valid_key.to_s.reverse.to_sym
+      context 'given a valid key' do
+        subject(:valid_key) {post.valid_keys.first}
+        
+        it 'should be true' do
+          expect(post.valid_key?(valid_key)).to be_truthy
+        end
+      end
+      
+      context 'given a valid key name as a string' do
+        subject(:valid_key) {post.valid_keys.first.to_s}
+        
+        it 'should be true' do
+          expect(post.valid_key?(valid_key)).to be_truthy
+        end
+      end
+      
+      context 'given an invalid key' do
+        subject(:invalid_key) {post.valid_keys.first.to_s.reverse.to_sym}
 
-        expect(post.valid_key?(valid_key)).to be_truthy
-        expect(post.valid_key?(valid_key.to_s)).to be_truthy
-        expect(post.valid_key?(invalid_key)).to be_falsey
-        expect(post.valid_key?(invalid_key.to_s)).to be_falsey
+        it 'should be false' do
+          expect(post.valid_key?(invalid_key)).to be_falsey
+        end
       end
     end
 
