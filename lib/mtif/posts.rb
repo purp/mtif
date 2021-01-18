@@ -101,9 +101,9 @@ class MTIF
 
       if valid_key?(key)
         if key == method
-          @data[key]
+          data[key]
         else
-          @data[key] = args.first
+          data[key] = args.first
         end
       else
         super
