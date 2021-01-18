@@ -92,6 +92,19 @@ RSpec.describe MTIF::Post do
       end
     end
   end
+  
+  context 'updating attributes via #method_missing' do
+    before :each do
+      @post = MTIF::Post.new(["ALLOW COMMENTS: 0\n"])
+    end
+
+    it 'should properly update values' do
+      expect(@post.allow_comments).not_to eq(1)
+      @post.allow_comments = 1
+      expect(@post.allow_comments).to eq(1)
+    end
+    
+  end
 
   context 'fetching data' do
     subject {MTIF::Post.new([])}
@@ -168,5 +181,4 @@ RSpec.describe MTIF::Post do
       expect(@post.to_mtif).to eq(@content.join)
     end
   end
-  
 end
