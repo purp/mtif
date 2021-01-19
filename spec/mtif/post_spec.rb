@@ -128,6 +128,7 @@ RSpec.describe MTIF::Post do
         "ALLOW COMMENTS: 0\n",
         "PRIMARY CATEGORY: Fun!\n",
         "CATEGORY: Fun!\n",
+        "CATEGORY: More Fun!\n",
         "TAGS: \"Movable Type\",foo,bar\n",
         "-----\n",
         "BODY:\n",
@@ -153,6 +154,10 @@ RSpec.describe MTIF::Post do
       expect(post.body).to eq("Start singing an obnoxious song and ----- never ----- stop.")
     end
     
+    it 'should correctly parse tags as comma-separated values' do
+      expect(post.tags).to eq(["Movable Type","foo","bar"])
+    end
+    
     describe '#method_missing' do
       it 'should properly update values' do
         expect(post.allow_comments).not_to eq(1)
@@ -166,6 +171,20 @@ RSpec.describe MTIF::Post do
       it 'should return concise MTIF containing only keys which are set' do
         # TODO: one day this will break because the hash doesn't join in key order.
         expect(post.to_mtif).to eq(@content.join)
+      end
+      
+      it 'should include updated values' do
+        post.allow_comments = 1
+        expect(post.to_mtif).to match(/ALLOW COMMENTS: 1/)
+      end
+      
+      it 'should convert tags to comma-separated values with proper quoting' do
+        expect(post.to_mtif).to match(/TAGS: "Movable Type",foo,bar/)
+      end
+      
+      it 'should convert categories to multiple CATEGORY lines' do
+        expect(post.to_mtif).to match(/CATEGORY: Fun!/)
+        expect(post.to_mtif).to match(/CATEGORY: More Fun!/)
       end
     end
   end
