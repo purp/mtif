@@ -115,15 +115,6 @@ RSpec.describe MTIF::Post do
             expect(post.send(key)) == []
           end
         end
-        
-        it 'should default to arrays for multivalue keys' do
-          post = MTIF::Post.new([])
-
-          MTIF::Post::MULTIVALUE_KEYS.each.with_index do |key, i|
-            post.send((key.to_s + '=').to_sym, [i])
-            expect(post.send(key)) == [i]
-          end
-        end
       end
     end
   end
