@@ -101,7 +101,7 @@ RSpec.describe MTIF::Post do
     end
     
     describe '#method_missing' do
-      context 'fetching data' do
+      context 'acting as an attribute accessor for valid keys only' do
         MTIF::Post::VALID_KEYS.each do |key|
           it {should respond_to(key)}
           it {should respond_to("#{key}=")}
@@ -116,44 +116,11 @@ RSpec.describe MTIF::Post do
           end
         end
       end
-      
-      context 'updating attributes' do
-        subject(:post) {MTIF::Post.new(["ALLOW COMMENTS: 0\n"])}
-
-        it 'should properly update values' do
-          expect(post.allow_comments).not_to eq(1)
-          post.allow_comments = 1
-          expect(post.allow_comments).to eq(1)
-        end
-      end
     end
   end
   
-  context 'parsing input' do
+  describe 'instances with content' do
     before :each do
-      @content = [
-        "AUTHOR: The ----- Meyer Kids\n",
-        "TITLE: Crazy Parents: -------- A Primer\n",
-        "-----\n",
-        "BODY:\n",
-        "Start singing an obnoxious song and ----- never ----- stop.\n",
-        "-----\n",
-        "--------\n"
-      ]
-
-      @post = MTIF::Post.new(@content)
-    end
-    
-    it 'should not notice separators that are not at the beginning of a line' do
-      expect(@post.author).to eq("The ----- Meyer Kids")
-      expect(@post.title).to eq("Crazy Parents: -------- A Primer")
-      expect(@post.body).to eq("Start singing an obnoxious song and ----- never ----- stop.")
-    end
-  end
-  
-  context '#to_mtif' do
-    before :each do
-      # TODO: refactor to remove ordering dependency
       @content = [
         "AUTHOR: The ----- Meyer Kids\n",
         "TITLE: Crazy Parents: -------- A Primer\n",
@@ -175,13 +142,30 @@ RSpec.describe MTIF::Post do
         "-----\n",
         "--------\n"
       ]
-
-      @post = MTIF::Post.new(@content)
     end
     
-    it 'should return concise MTIF containing only keys which are set' do
-      expect(@post).to respond_to(:to_mtif)
-      expect(@post.to_mtif).to eq(@content.join)
+    subject(:post) {MTIF::Post.new(@content)}
+    
+    it 'should correctly parse fields with separator text inside the field' do
+      expect(post.author).to eq("The ----- Meyer Kids")
+      expect(post.title).to eq("Crazy Parents: -------- A Primer")
+      expect(post.body).to eq("Start singing an obnoxious song and ----- never ----- stop.")
+    end
+    
+    describe '#method_missing' do
+      it 'should properly update values' do
+        expect(post.allow_comments).not_to eq(1)
+        post.allow_comments = 1
+        expect(post.allow_comments).to eq(1)
+      end
+    end
+  
+    describe '#to_mtif' do
+      it {should respond_to(:to_mtif)}
+      it 'should return concise MTIF containing only keys which are set' do
+        # TODO: one day this will break because the hash doesn't join in key order.
+        expect(post.to_mtif).to eq(@content.join)
+      end
     end
   end
 end
