@@ -1,6 +1,6 @@
 # MTIF
 
-A gem to read Movable Type Import Format
+A gem to read Movable Type Import Format, as documented at [TypePad.org](https://movabletype.org/documentation/appendices/import-export-format.html) and also in the [Wayback Machine](https://web.archive.org/web/20210105063407/https://movabletype.org/documentation/appendices/import-export-format.html)
 
 ## Installation
 
