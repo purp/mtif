@@ -8,7 +8,6 @@ class MTIF
     keywords allow_comments allow_pings convert_breaks no_entry primary_category).map(&:to_sym)
     MULTILINE_KEYS = %w(body extended_body excerpt keywords comment ping).map(&:to_sym)
     MULTIVALUE_KEYS = %w(category tags comment ping).map(&:to_sym)
-
     CSV_KEYS = %w(tags).map(&:to_sym)
 
     VALID_KEYS = (SINGLE_VALUE_KEYS + MULTILINE_KEYS + MULTIVALUE_KEYS).sort.uniq
