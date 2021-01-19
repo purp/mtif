@@ -7,7 +7,6 @@ class MTIF
     SINGLE_VALUE_KEYS = %w(author title status basename date unique_url body extended_body excerpt
     keywords allow_comments allow_pings convert_breaks no_entry primary_category).map(&:to_sym)
     MULTILINE_KEYS = %w(body extended_body excerpt keywords comment ping).map(&:to_sym)
-    MULTIVALUE_KEYS = %w(category tag comment ping).map(&:to_sym)
     MULTIVALUE_KEYS = %w(category tags comment ping).map(&:to_sym)
 
     CSV_KEYS = %w(tags).map(&:to_sym)
