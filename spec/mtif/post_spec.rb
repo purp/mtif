@@ -99,37 +99,32 @@ RSpec.describe MTIF::Post do
       it {should_not include(*MTIF::Post::SINGLE_VALUE_KEYS)}
       it {should include(*(MTIF::Post::MULTILINE_KEYS & MTIF::Post::MULTIVALUE_KEYS))}
     end
-  end
-  
-  context 'updating attributes via #method_missing' do
-    before :each do
-      @post = MTIF::Post.new(["ALLOW COMMENTS: 0\n"])
-    end
-
-    it 'should properly update values' do
-      expect(@post.allow_comments).not_to eq(1)
-      @post.allow_comments = 1
-      expect(@post.allow_comments).to eq(1)
-    end
     
-  end
+    describe '#method_missing' do
+      context 'fetching data' do
+        MTIF::Post::VALID_KEYS.each do |key|
+          it {should respond_to(key)}
+          it {should respond_to("#{key}=")}
+        end
 
-  context 'fetching data' do
-    subject {MTIF::Post.new([])}
-    
-    MTIF::Post::VALID_KEYS.each do |key|
-      it {should respond_to(key)}
-      it {should respond_to("#{key}=")}
-    end
+        it {should_not respond_to(:this_is_not_a_valid_key)}
+        it {should_not respond_to(:this_is_not_a_valid_key=)}
 
-    it {should_not respond_to(:this_is_not_a_valid_key)}
-    it {should_not respond_to(:this_is_not_a_valid_key=)}
+        it 'should return arrays for multivalue keys by default' do
+          MTIF::Post::MULTIVALUE_KEYS.each do |key|
+            expect(post.send(key)) == []
+          end
+        end
+      end
+      
+      context 'updating attributes' do
+        subject(:post) {MTIF::Post.new(["ALLOW COMMENTS: 0\n"])}
 
-    it 'should default to arrays for multivalue keys' do
-      post = MTIF::Post.new([])
-
-      MTIF::Post::MULTIVALUE_KEYS.each do |key|
-        expect(post.send(key)) == []
+        it 'should properly update values' do
+          expect(post.allow_comments).not_to eq(1)
+          post.allow_comments = 1
+          expect(post.allow_comments).to eq(1)
+        end
       end
     end
   end
@@ -160,15 +155,15 @@ RSpec.describe MTIF::Post do
     before :each do
       # TODO: refactor to remove ordering dependency
       @content = [
-        "AUTHOR: The Meyer Kids\n",
-        "TITLE: Crazy Parents: A Primer\n",
+        "AUTHOR: The ----- Meyer Kids\n",
+        "TITLE: Crazy Parents: -------- A Primer\n",
         "DATE: 06/19/1999 07:00:00 PM\n",
         "ALLOW COMMENTS: 0\n",
         "PRIMARY CATEGORY: Fun!\n",
         "CATEGORY: Fun!\n",
         "-----\n",
         "BODY:\n",
-        "Start singing an obnoxious song and never stop.\n",
+        "Start singing an obnoxious song and ----- never ----- stop.\n",
         "-----\n",
         "COMMENT:\n",
         "AUTHOR: Jim Meyer\n",
